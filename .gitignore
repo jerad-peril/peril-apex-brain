@@ -2,3 +2,4 @@ chromadb_store/
 __pycache__/
 *.pyc
 .env
+vault_snapshots/
