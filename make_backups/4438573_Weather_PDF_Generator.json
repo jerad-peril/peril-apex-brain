@@ -1,0 +1,1574 @@
+{
+  "code": "OK",
+  "response": {
+    "blueprint": {
+      "flow": [
+        {
+          "id": 1,
+          "mapper": {},
+          "module": "airtable:TriggerWatchRecords",
+          "version": 3,
+          "metadata": {
+            "restore": {
+              "parameters": {
+                "base": {
+                  "label": "Peril Claims Engine"
+                },
+                "view": {
+                  "label": "Weather PDF Queue"
+                },
+                "table": {
+                  "label": "Cold Pipeline"
+                },
+                "config": {
+                  "nested": {
+                    "labelField": {
+                      "label": "Property Address"
+                    },
+                    "triggerField": {
+                      "label": "Created"
+                    }
+                  }
+                },
+                "__IMTCONN__": {
+                  "data": {
+                    "scoped": "true",
+                    "connection": "airtable2"
+                  },
+                  "label": "My Airtable Token "
+                }
+              }
+            },
+            "designer": {
+              "x": 0,
+              "y": 0
+            },
+            "interface": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "createdTime",
+                "type": "date",
+                "label": "Created Time"
+              },
+              {
+                "name": "Property Address",
+                "type": "text",
+                "label": "Property Address"
+              },
+              {
+                "name": "Notes",
+                "type": "text",
+                "label": "Notes",
+                "multiline": true
+              },
+              {
+                "name": "Assignee",
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "ID"
+                  },
+                  {
+                    "name": "email",
+                    "type": "email",
+                    "label": "Email"
+                  },
+                  {
+                    "name": "name",
+                    "type": "text",
+                    "label": "Name"
+                  }
+                ],
+                "type": "collection",
+                "label": "Assignee"
+              },
+              {
+                "name": "Status",
+                "type": "text",
+                "label": "Status"
+              },
+              {
+                "name": "Attachments",
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "ID"
+                  },
+                  {
+                    "name": "width",
+                    "type": "uinteger",
+                    "label": "Width"
+                  },
+                  {
+                    "name": "height",
+                    "type": "uinteger",
+                    "label": "Height"
+                  },
+                  {
+                    "name": "url",
+                    "type": "url",
+                    "label": "URL"
+                  },
+                  {
+                    "name": "filename",
+                    "type": "filename",
+                    "label": "File name"
+                  },
+                  {
+                    "name": "size",
+                    "type": "uinteger",
+                    "label": "Size"
+                  },
+                  {
+                    "name": "type",
+                    "type": "text",
+                    "label": "MIME type"
+                  },
+                  {
+                    "name": "thumbnails",
+                    "spec": [
+                      {
+                        "name": "small",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Small"
+                      },
+                      {
+                        "name": "large",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Large"
+                      },
+                      {
+                        "name": "full",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Full"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Thumbnails"
+                  }
+                ],
+                "type": "array",
+                "label": "Attachments"
+              },
+              {
+                "name": "Attachment Summary",
+                "type": "text",
+                "label": "Attachment Summary"
+              },
+              {
+                "name": "Company Name",
+                "type": "text",
+                "label": "Company Name"
+              },
+              {
+                "name": "Contact Email",
+                "type": "text",
+                "label": "Contact Email"
+              },
+              {
+                "name": "City / State",
+                "type": "text",
+                "label": "City / State"
+              },
+              {
+                "name": "Hail Size",
+                "type": "number",
+                "label": "Hail Size"
+              },
+              {
+                "name": "Date of Storm",
+                "time": false,
+                "type": "date",
+                "label": "Date of Storm"
+              },
+              {
+                "name": "Date of First Contact",
+                "time": false,
+                "type": "date",
+                "label": "Date of First Contact"
+              },
+              {
+                "name": "Wind Speed",
+                "type": "number",
+                "label": "Wind Speed"
+              },
+              {
+                "name": "Follow-Up Status",
+                "type": "text",
+                "label": "Follow-Up Status"
+              },
+              {
+                "name": "Drip Stage",
+                "type": "number",
+                "label": "Drip Stage"
+              },
+              {
+                "name": "Calendly Booked",
+                "type": "boolean",
+                "label": "Calendly Booked"
+              },
+              {
+                "name": "Promoted to Lead Sales",
+                "type": "boolean",
+                "label": "Promoted to Lead Sales"
+              },
+              {
+                "name": "Lead Score",
+                "type": "text",
+                "label": "Lead Score"
+              },
+              {
+                "name": "Priority Tier",
+                "type": "text",
+                "label": "Priority Tier"
+              },
+              {
+                "name": "Created",
+                "type": "date",
+                "label": "Created"
+              },
+              {
+                "name": "Weather Report PDF",
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "ID"
+                  },
+                  {
+                    "name": "width",
+                    "type": "uinteger",
+                    "label": "Width"
+                  },
+                  {
+                    "name": "height",
+                    "type": "uinteger",
+                    "label": "Height"
+                  },
+                  {
+                    "name": "url",
+                    "type": "url",
+                    "label": "URL"
+                  },
+                  {
+                    "name": "filename",
+                    "type": "filename",
+                    "label": "File name"
+                  },
+                  {
+                    "name": "size",
+                    "type": "uinteger",
+                    "label": "Size"
+                  },
+                  {
+                    "name": "type",
+                    "type": "text",
+                    "label": "MIME type"
+                  },
+                  {
+                    "name": "thumbnails",
+                    "spec": [
+                      {
+                        "name": "small",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Small"
+                      },
+                      {
+                        "name": "large",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Large"
+                      },
+                      {
+                        "name": "full",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Full"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Thumbnails"
+                  }
+                ],
+                "type": "array",
+                "label": "Weather Report PDF"
+              },
+              {
+                "name": "Asset Class",
+                "type": "text",
+                "label": "Asset Class"
+              },
+              {
+                "name": "Weather Severity",
+                "type": "text",
+                "label": "Weather Severity"
+              },
+              {
+                "name": "SOL Urgency",
+                "type": "text",
+                "label": "SOL Urgency"
+              },
+              {
+                "name": "Historical Claim Status",
+                "type": "text",
+                "label": "Historical Claim Status"
+              },
+              {
+                "name": "Carrier Tractability",
+                "type": "number",
+                "label": "Carrier Tractability"
+              },
+              {
+                "name": "Direct Contact",
+                "type": "boolean",
+                "label": "Direct Contact"
+              },
+              {
+                "name": "Claim Status",
+                "type": "text",
+                "label": "Claim Status"
+              },
+              {
+                "name": "POSE Score",
+                "type": "text",
+                "label": "POSE Score"
+              },
+              {
+                "name": "Lead Tier",
+                "type": "text",
+                "label": "Lead Tier"
+              },
+              {
+                "name": "Compliance Check: Cleared to Post",
+                "type": "boolean",
+                "label": "Compliance Check: Cleared to Post"
+              },
+              {
+                "name": "Social Outreach Result",
+                "type": "text",
+                "label": "Social Outreach Result"
+              },
+              {
+                "name": "Email Address",
+                "type": "text",
+                "label": "Email Address",
+                "multiline": true
+              },
+              {
+                "name": "Subject Line",
+                "type": "text",
+                "label": "Subject Line"
+              },
+              {
+                "name": "AI-Drafted Email Copy",
+                "type": "text",
+                "label": "AI-Drafted Email Copy",
+                "multiline": true
+              },
+              {
+                "name": "Email Sent",
+                "type": "boolean",
+                "label": "Email Sent"
+              }
+            ],
+            "parameters": [
+              {
+                "name": "__IMTCONN__",
+                "type": "account:airtable3,airtable2",
+                "label": "Connection",
+                "required": true
+              },
+              {
+                "name": "base",
+                "type": "select",
+                "label": "Base",
+                "required": true
+              },
+              {
+                "name": "useColumnId",
+                "type": "boolean",
+                "label": "Use Column ID",
+                "required": true
+              },
+              {
+                "name": "table",
+                "type": "select",
+                "label": "Table",
+                "required": true
+              },
+              {
+                "name": "config",
+                "spec": [
+                  {
+                    "name": "triggerField",
+                    "type": "select",
+                    "label": "Trigger field",
+                    "required": true
+                  },
+                  {
+                    "name": "triggerField",
+                    "type": "hidden"
+                  },
+                  {
+                    "name": "labelField",
+                    "type": "select",
+                    "label": "Label field",
+                    "required": true
+                  }
+                ],
+                "type": "collection",
+                "label": "Trigger configuration"
+              },
+              {
+                "name": "maxRecords",
+                "type": "integer",
+                "label": "Limit",
+                "required": true
+              },
+              {
+                "name": "view",
+                "type": "select",
+                "label": "View"
+              },
+              {
+                "name": "formula",
+                "type": "text",
+                "label": "Formula"
+              }
+            ]
+          },
+          "parameters": {
+            "base": "apptqydlALDDvUmk4",
+            "view": "viwm3s4u7xxMqkek0",
+            "table": "tbl6ft3JsQV5k9odK",
+            "config": {
+              "labelField": "Property Address",
+              "triggerField": "Created"
+            },
+            "formula": "",
+            "maxRecords": 10,
+            "__IMTCONN__": 7692537,
+            "useColumnId": false
+          }
+        },
+        {
+          "id": 2,
+          "mapper": {
+            "name": "{{1.`Company Name`}} - Hail Report",
+            "footer": false,
+            "header": false,
+            "content": " ",
+            "folderId": "root",
+            "destination": "drive"
+          },
+          "module": "google-docs:createADocument",
+          "onerror": [
+            {
+              "id": 6,
+              "mapper": {
+                "count": "3",
+                "retry": true,
+                "interval": "15"
+              },
+              "module": "builtin:Break",
+              "version": 1,
+              "metadata": {
+                "expect": [
+                  {
+                    "name": "retry",
+                    "type": "boolean",
+                    "label": "Automatically complete execution",
+                    "required": true
+                  },
+                  {
+                    "name": "count",
+                    "type": "uinteger",
+                    "label": "Number of attempts",
+                    "required": true,
+                    "validate": {
+                      "max": 10000,
+                      "min": 1
+                    }
+                  },
+                  {
+                    "name": "interval",
+                    "type": "uinteger",
+                    "label": "Interval between attempts",
+                    "required": true,
+                    "validate": {
+                      "max": 44640,
+                      "min": 1
+                    }
+                  }
+                ],
+                "restore": {
+                  "expect": {
+                    "retry": {
+                      "mode": "chose"
+                    }
+                  }
+                },
+                "designer": {
+                  "x": 600,
+                  "y": 150
+                }
+              },
+              "parameters": {}
+            }
+          ],
+          "version": 1,
+          "metadata": {
+            "expect": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Name",
+                "required": true
+              },
+              {
+                "name": "content",
+                "type": "text",
+                "label": "Content",
+                "required": true
+              },
+              {
+                "name": "destination",
+                "type": "select",
+                "label": "Choose a Drive",
+                "required": true,
+                "validate": {
+                  "enum": [
+                    "drive",
+                    "share",
+                    "team"
+                  ]
+                }
+              },
+              {
+                "name": "header",
+                "type": "boolean",
+                "label": "Insert a Header",
+                "required": true
+              },
+              {
+                "name": "footer",
+                "type": "boolean",
+                "label": "Insert a Footer",
+                "required": true
+              },
+              {
+                "name": "folderId",
+                "type": "folder",
+                "label": "New Document's Location",
+                "required": true
+              }
+            ],
+            "restore": {
+              "expect": {
+                "folderId": {
+                  "mode": "edit",
+                  "path": []
+                },
+                "destination": {
+                  "label": "My Drive"
+                }
+              },
+              "parameters": {
+                "__IMTCONN__": {
+                  "data": {
+                    "scoped": "true",
+                    "connection": "google"
+                  },
+                  "label": "My Google connection"
+                }
+              }
+            },
+            "designer": {
+              "x": 300,
+              "y": 0
+            },
+            "parameters": [
+              {
+                "name": "__IMTCONN__",
+                "type": "account:google",
+                "label": "Connection",
+                "required": true
+              }
+            ]
+          },
+          "parameters": {
+            "__IMTCONN__": 7906479
+          }
+        },
+        {
+          "id": 3,
+          "mapper": {
+            "text": "PERIL ADJUSTERS - SEVERE WEATHER REPORT\nProperty: {{1.`Property Address`}}\nMax Hail Size: {{1.`Hail Size`}} inches\nMax Wind Speed: {{1.`Wind Speed`}} mph\n\nThis property has sustained verifiable severe weather parameters. Immediate inspection recommended.",
+            "choose": "mapping",
+            "select": "document",
+            "document": "{{2.id}}"
+          },
+          "module": "google-docs:appendADocument",
+          "version": 1,
+          "metadata": {
+            "expect": [
+              {
+                "name": "choose",
+                "type": "select",
+                "label": "Select a Document",
+                "required": true,
+                "validate": {
+                  "enum": [
+                    "mapping",
+                    "dropdown"
+                  ]
+                }
+              },
+              {
+                "name": "document",
+                "type": "text",
+                "label": "Document ID",
+                "required": true
+              },
+              {
+                "name": "select",
+                "type": "select",
+                "label": "Insert a Paragraph",
+                "required": true,
+                "validate": {
+                  "enum": [
+                    "location",
+                    "document",
+                    "segment"
+                  ]
+                }
+              },
+              {
+                "name": "text",
+                "type": "text",
+                "label": "Appended Text",
+                "required": true
+              }
+            ],
+            "restore": {
+              "expect": {
+                "choose": {
+                  "label": "By Mapping"
+                },
+                "select": {
+                  "label": "By appending to the body of document"
+                }
+              },
+              "parameters": {
+                "__IMTCONN__": {
+                  "data": {
+                    "scoped": "true",
+                    "connection": "google"
+                  },
+                  "label": "My Google connection (jerad@periladjusters.com)"
+                }
+              }
+            },
+            "designer": {
+              "x": 600,
+              "y": -150
+            },
+            "parameters": [
+              {
+                "name": "__IMTCONN__",
+                "type": "account:google",
+                "label": "Connection",
+                "required": true
+              }
+            ]
+          },
+          "parameters": {
+            "__IMTCONN__": 7906479
+          }
+        },
+        {
+          "id": 4,
+          "mapper": {
+            "file": "{{2.id}}",
+            "select": "map",
+            "formatDrawings": "image/jpeg",
+            "formatDocuments": "application/pdf",
+            "formatSpreadsheets": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "formatPresentations": "application/vnd.openxmlformats-officedocument.presentationml.presentation"
+          },
+          "module": "google-drive:getAFile",
+          "version": 4,
+          "metadata": {
+            "expect": [
+              {
+                "name": "select",
+                "type": "select",
+                "label": "Enter a File ID",
+                "required": true,
+                "validate": {
+                  "enum": [
+                    "map",
+                    "value"
+                  ]
+                }
+              },
+              {
+                "name": "formatDocuments",
+                "type": "select",
+                "label": "Convert Google Documents Files to Format",
+                "required": true,
+                "validate": {
+                  "enum": [
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                    "application/pdf",
+                    "application/vnd.oasis.opendocument.text",
+                    "text/html",
+                    "text/plain",
+                    "application/rtf",
+                    "text/markdown"
+                  ]
+                }
+              },
+              {
+                "name": "formatSpreadsheets",
+                "type": "select",
+                "label": "Convert Google Spreadsheets Files to Format",
+                "required": true,
+                "validate": {
+                  "enum": [
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    "application/x-vnd.oasis.opendocument.spreadsheet",
+                    "application/pdf",
+                    "text/csv"
+                  ]
+                }
+              },
+              {
+                "name": "formatPresentations",
+                "type": "select",
+                "label": "Convert Google Slides Files to Format",
+                "required": true,
+                "validate": {
+                  "enum": [
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                    "application/pdf"
+                  ]
+                }
+              },
+              {
+                "name": "formatDrawings",
+                "type": "select",
+                "label": "Convert Google Drawings Files to Format",
+                "required": true,
+                "validate": {
+                  "enum": [
+                    "image/jpeg",
+                    "image/png",
+                    "image/svg+xml",
+                    "application/pdf"
+                  ]
+                }
+              },
+              {
+                "name": "file",
+                "type": "text",
+                "label": "File ID",
+                "required": true
+              }
+            ],
+            "restore": {
+              "expect": {
+                "select": {
+                  "label": "Enter manually"
+                },
+                "formatDrawings": {
+                  "label": "JPEG"
+                },
+                "formatDocuments": {
+                  "label": "PDF"
+                },
+                "formatSpreadsheets": {
+                  "label": "MS Excel"
+                },
+                "formatPresentations": {
+                  "label": "MS PowerPoint"
+                }
+              },
+              "parameters": {
+                "__IMTCONN__": {
+                  "data": {
+                    "scoped": "true",
+                    "connection": "google-restricted"
+                  },
+                  "label": "Google Drive (Full Access) (jerad@periladjusters.com)"
+                }
+              }
+            },
+            "advanced": true,
+            "designer": {
+              "x": 900,
+              "y": 0
+            },
+            "parameters": [
+              {
+                "name": "__IMTCONN__",
+                "type": "account:google-restricted",
+                "label": "Connection",
+                "required": true
+              }
+            ]
+          },
+          "parameters": {
+            "__IMTCONN__": 7807189
+          }
+        },
+        {
+          "id": 5,
+          "mapper": {
+            "id": "{{1.id}}",
+            "base": "apptqydlALDDvUmk4",
+            "table": "tbl6ft3JsQV5k9odK",
+            "record": {
+              "fldKckApsRb6j8MjM": [
+                {
+                  "url": "https://docs.google.com/document/d/{{2.id}}/export?format=pdf",
+                  "filename": "{{1.`Company Name`}} - Hail Report.pdf"
+                }
+              ]
+            },
+            "typecast": true,
+            "useColumnId": false
+          },
+          "module": "airtable:ActionUpdateRecords",
+          "version": 3,
+          "metadata": {
+            "expect": [
+              {
+                "name": "base",
+                "type": "select",
+                "label": "Base",
+                "required": true
+              },
+              {
+                "name": "typecast",
+                "type": "boolean",
+                "label": "Smart links",
+                "required": true
+              },
+              {
+                "name": "useColumnId",
+                "type": "boolean",
+                "label": "Use Column ID",
+                "required": true
+              },
+              {
+                "name": "table",
+                "type": "select",
+                "label": "Table",
+                "required": true
+              },
+              {
+                "name": "id",
+                "type": "text",
+                "label": "Record ID",
+                "required": true
+              },
+              {
+                "name": "record",
+                "spec": [
+                  {
+                    "name": "fldCm8GJuPx8p0H9x",
+                    "type": "text",
+                    "label": "Property Address"
+                  },
+                  {
+                    "name": "fld27Hx5OBerISqEO",
+                    "type": "text",
+                    "label": "Notes"
+                  },
+                  {
+                    "name": "fldtZ8dgEBSWgWDGs",
+                    "spec": [
+                      {
+                        "name": "id",
+                        "type": "text",
+                        "label": "ID"
+                      },
+                      {
+                        "name": "email",
+                        "type": "email",
+                        "label": "Email"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Assignee"
+                  },
+                  {
+                    "mode": "edit",
+                    "name": "fldoy5H0zZrVci6Df",
+                    "type": "select",
+                    "label": "Status"
+                  },
+                  {
+                    "name": "fldRSfr1bY5uNQtls",
+                    "spec": [
+                      {
+                        "name": "url",
+                        "type": "text",
+                        "label": "File URL"
+                      },
+                      {
+                        "name": "filename",
+                        "type": "filename",
+                        "label": "File name"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Attachments"
+                  },
+                  {
+                    "name": "flda50TFilkqeTQXP",
+                    "type": "text",
+                    "label": "Company Name"
+                  },
+                  {
+                    "name": "fldto6iigVDuZj3D0",
+                    "type": "text",
+                    "label": "Contact Email"
+                  },
+                  {
+                    "name": "flddvLiggBBdHOmOG",
+                    "type": "text",
+                    "label": "City / State"
+                  },
+                  {
+                    "name": "fldVl5hKV5Y5zvfNI",
+                    "type": "number",
+                    "label": "Hail Size"
+                  },
+                  {
+                    "name": "fldTwNuNa5fuwKPAT",
+                    "time": false,
+                    "type": "date",
+                    "label": "Date of Storm"
+                  },
+                  {
+                    "name": "fldAcztO8tZyhopoU",
+                    "time": false,
+                    "type": "date",
+                    "label": "Date of First Contact"
+                  },
+                  {
+                    "name": "fldgSQhbqqMq8Ajni",
+                    "type": "number",
+                    "label": "Wind Speed"
+                  },
+                  {
+                    "mode": "edit",
+                    "name": "fldLRW08FtvnS9V2j",
+                    "type": "select",
+                    "label": "Follow-Up Status"
+                  },
+                  {
+                    "name": "fld6ZXsIl9huuKfk3",
+                    "type": "number",
+                    "label": "Drip Stage"
+                  },
+                  {
+                    "name": "fldvoEvnU7AsAFRqy",
+                    "type": "boolean",
+                    "label": "Calendly Booked"
+                  },
+                  {
+                    "name": "fldNWspMuJ1hdRHrE",
+                    "type": "boolean",
+                    "label": "Promoted to Lead Sales"
+                  },
+                  {
+                    "name": "fldKckApsRb6j8MjM",
+                    "spec": [
+                      {
+                        "name": "url",
+                        "type": "text",
+                        "label": "File URL"
+                      },
+                      {
+                        "name": "filename",
+                        "type": "filename",
+                        "label": "File name"
+                      }
+                    ],
+                    "type": "array",
+                    "label": "Weather Report PDF"
+                  }
+                ],
+                "type": "collection",
+                "label": "Record"
+              }
+            ],
+            "restore": {
+              "expect": {
+                "base": {
+                  "label": "Peril Claims Engine"
+                },
+                "table": {
+                  "label": "Cold Pipeline"
+                },
+                "record": {
+                  "nested": {
+                    "fldKckApsRb6j8MjM": {
+                      "mode": "chose",
+                      "items": [
+                        null
+                      ]
+                    },
+                    "fldLRW08FtvnS9V2j": {
+                      "mode": "edit"
+                    },
+                    "fldNWspMuJ1hdRHrE": {
+                      "mode": "edit"
+                    },
+                    "fldRSfr1bY5uNQtls": {
+                      "mode": "chose"
+                    },
+                    "fldoy5H0zZrVci6Df": {
+                      "mode": "edit"
+                    },
+                    "fldvoEvnU7AsAFRqy": {
+                      "mode": "chose"
+                    }
+                  }
+                },
+                "typecast": {
+                  "mode": "chose"
+                },
+                "useColumnId": {
+                  "mode": "chose"
+                }
+              },
+              "parameters": {
+                "__IMTCONN__": {
+                  "data": {
+                    "scoped": "true",
+                    "connection": "airtable2"
+                  },
+                  "label": "My Airtable Token "
+                }
+              }
+            },
+            "designer": {
+              "x": 1200,
+              "y": 0
+            },
+            "interface": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "createdTime",
+                "type": "date",
+                "label": "Created Time"
+              },
+              {
+                "name": "Property Address",
+                "type": "text",
+                "label": "Property Address"
+              },
+              {
+                "name": "Notes",
+                "type": "text",
+                "label": "Notes",
+                "multiline": true
+              },
+              {
+                "name": "Assignee",
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "ID"
+                  },
+                  {
+                    "name": "email",
+                    "type": "email",
+                    "label": "Email"
+                  },
+                  {
+                    "name": "name",
+                    "type": "text",
+                    "label": "Name"
+                  }
+                ],
+                "type": "collection",
+                "label": "Assignee"
+              },
+              {
+                "name": "Status",
+                "type": "text",
+                "label": "Status"
+              },
+              {
+                "name": "Attachments",
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "ID"
+                  },
+                  {
+                    "name": "width",
+                    "type": "uinteger",
+                    "label": "Width"
+                  },
+                  {
+                    "name": "height",
+                    "type": "uinteger",
+                    "label": "Height"
+                  },
+                  {
+                    "name": "url",
+                    "type": "url",
+                    "label": "URL"
+                  },
+                  {
+                    "name": "filename",
+                    "type": "filename",
+                    "label": "File name"
+                  },
+                  {
+                    "name": "size",
+                    "type": "uinteger",
+                    "label": "Size"
+                  },
+                  {
+                    "name": "type",
+                    "type": "text",
+                    "label": "MIME type"
+                  },
+                  {
+                    "name": "thumbnails",
+                    "spec": [
+                      {
+                        "name": "small",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Small"
+                      },
+                      {
+                        "name": "large",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Large"
+                      },
+                      {
+                        "name": "full",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Full"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Thumbnails"
+                  }
+                ],
+                "type": "array",
+                "label": "Attachments"
+              },
+              {
+                "name": "Attachment Summary",
+                "type": "text",
+                "label": "Attachment Summary"
+              },
+              {
+                "name": "Company Name",
+                "type": "text",
+                "label": "Company Name"
+              },
+              {
+                "name": "Contact Email",
+                "type": "text",
+                "label": "Contact Email"
+              },
+              {
+                "name": "City / State",
+                "type": "text",
+                "label": "City / State"
+              },
+              {
+                "name": "Hail Size",
+                "type": "number",
+                "label": "Hail Size"
+              },
+              {
+                "name": "Date of Storm",
+                "time": false,
+                "type": "date",
+                "label": "Date of Storm"
+              },
+              {
+                "name": "Date of First Contact",
+                "time": false,
+                "type": "date",
+                "label": "Date of First Contact"
+              },
+              {
+                "name": "Wind Speed",
+                "type": "number",
+                "label": "Wind Speed"
+              },
+              {
+                "name": "Follow-Up Status",
+                "type": "text",
+                "label": "Follow-Up Status"
+              },
+              {
+                "name": "Drip Stage",
+                "type": "number",
+                "label": "Drip Stage"
+              },
+              {
+                "name": "Calendly Booked",
+                "type": "boolean",
+                "label": "Calendly Booked"
+              },
+              {
+                "name": "Promoted to Lead Sales",
+                "type": "boolean",
+                "label": "Promoted to Lead Sales"
+              },
+              {
+                "name": "Lead Score",
+                "type": "text",
+                "label": "Lead Score"
+              },
+              {
+                "name": "Priority Tier",
+                "type": "text",
+                "label": "Priority Tier"
+              },
+              {
+                "name": "Created",
+                "type": "date",
+                "label": "Created"
+              },
+              {
+                "name": "Weather Report PDF",
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "ID"
+                  },
+                  {
+                    "name": "width",
+                    "type": "uinteger",
+                    "label": "Width"
+                  },
+                  {
+                    "name": "height",
+                    "type": "uinteger",
+                    "label": "Height"
+                  },
+                  {
+                    "name": "url",
+                    "type": "url",
+                    "label": "URL"
+                  },
+                  {
+                    "name": "filename",
+                    "type": "filename",
+                    "label": "File name"
+                  },
+                  {
+                    "name": "size",
+                    "type": "uinteger",
+                    "label": "Size"
+                  },
+                  {
+                    "name": "type",
+                    "type": "text",
+                    "label": "MIME type"
+                  },
+                  {
+                    "name": "thumbnails",
+                    "spec": [
+                      {
+                        "name": "small",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Small"
+                      },
+                      {
+                        "name": "large",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Large"
+                      },
+                      {
+                        "name": "full",
+                        "spec": [
+                          {
+                            "name": "url",
+                            "type": "url",
+                            "label": "URL"
+                          },
+                          {
+                            "name": "width",
+                            "type": "uinteger",
+                            "label": "Width"
+                          },
+                          {
+                            "name": "height",
+                            "type": "uinteger",
+                            "label": "Height"
+                          }
+                        ],
+                        "type": "collection",
+                        "label": "Full"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Thumbnails"
+                  }
+                ],
+                "type": "array",
+                "label": "Weather Report PDF"
+              }
+            ],
+            "parameters": [
+              {
+                "name": "__IMTCONN__",
+                "type": "account:airtable3,airtable2",
+                "label": "Connection",
+                "required": true
+              }
+            ]
+          },
+          "parameters": {
+            "__IMTCONN__": 7692537
+          }
+        }
+      ],
+      "name": "Weather PDF Generator",
+      "metadata": {
+        "instant": false,
+        "version": 1,
+        "designer": {
+          "orphans": []
+        },
+        "scenario": {
+          "dlq": true,
+          "slots": null,
+          "dataloss": false,
+          "maxErrors": 3,
+          "autoCommit": true,
+          "roundtrips": 1,
+          "sequential": false,
+          "confidential": false,
+          "freshVariables": false,
+          "autoCommitTriggerLast": true
+        }
+      }
+    },
+    "scheduling": {
+      "type": "indefinitely",
+      "interval": 900
+    },
+    "concept": false,
+    "created": "2026-03-18T03:50:22.554Z",
+    "last_edit": "2026-03-31T22:57:42.485Z",
+    "metadata": {
+      "input_spec": [],
+      "output_spec": []
+    },
+    "idSequence": 7
+  }
+}

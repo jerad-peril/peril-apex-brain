@@ -1,0 +1,1778 @@
+{
+  "code": "OK",
+  "response": {
+    "blueprint": {
+      "flow": [
+        {
+          "id": 1,
+          "mapper": {
+            "name": "CityList",
+            "scope": "roundtrip",
+            "value": "Dallas,Houston,Fort Worth,Austin,San Antonio,Columbus,Indianapolis,Tulsa,Oklahoma City,Cincinnati"
+          },
+          "module": "util:SetVariable2",
+          "version": 1,
+          "metadata": {
+            "expect": [
+              {
+                "name": "name",
+                "type": "text",
+                "label": "Variable name",
+                "required": true
+              },
+              {
+                "name": "scope",
+                "type": "select",
+                "label": "Variable lifetime",
+                "required": true,
+                "validate": {
+                  "enum": [
+                    "roundtrip",
+                    "execution"
+                  ]
+                }
+              },
+              {
+                "name": "value",
+                "type": "any",
+                "label": "Variable value"
+              }
+            ],
+            "restore": {
+              "expect": {
+                "scope": {
+                  "label": "One cycle"
+                }
+              }
+            },
+            "designer": {
+              "x": 0,
+              "y": 0
+            },
+            "interface": [
+              {
+                "name": "\n",
+                "type": "any",
+                "label": "\n"
+              }
+            ]
+          },
+          "parameters": {}
+        },
+        {
+          "id": 2,
+          "mapper": {
+            "array": "{{split(1.CityList; \",\")}}"
+          },
+          "module": "builtin:BasicFeeder",
+          "version": 1,
+          "metadata": {
+            "expect": [
+              {
+                "mode": "edit",
+                "name": "array",
+                "spec": [],
+                "type": "array",
+                "label": "Array"
+              }
+            ],
+            "restore": {
+              "expect": {
+                "array": {
+                  "mode": "edit"
+                }
+              }
+            },
+            "designer": {
+              "x": 300,
+              "y": 0
+            }
+          },
+          "parameters": {}
+        },
+        {
+          "id": 3,
+          "filter": null,
+          "mapper": {
+            "model": "claude-sonnet-4-6",
+            "messages": [
+              {
+                "role": "user",
+                "content": "{{2.value}}\\n\\nWrite a 1,500+ word commercial property insurance article for the city listed above. This is for Peril Adjusters LLC, a commercial public adjusting firm licensed in 21 states including Texas, Ohio, Indiana, and Oklahoma.\\n\\nTarget audience: commercial property owners, HOA boards, church leadership, hotel general managers, and industrial property managers.\\n\\nArticle requirements:\\n- Minimum 1,500 words\\n- Include a real settlement example showing carrier underpayment reversed (reference Peril case results such as HOA: $32,491 carrier offer reversed to $1,886,475.89 final settlement, or Church: $1,781,221 reversed to $3,040,344.54)\\n- Fee language must use exactly: \\\"10% of Replacement Cost Value recovered\\\" \u2014 NEVER use \\\"maximize\\\" or \\\"maximum\\\" or \\\"proof of loss\\\"\\n- Focus exclusively on commercial property (NOT residential)\\n- Cover storm/hail damage specific to the region (Texas large hail, Ohio/Indiana/Oklahoma recent severe weather events)\\n- Include depth matching https://claimsmate.com/how-to-handle-underpaid-insurance-claims/\\n- Target SEMrush top-click terms for \\\"commercial public adjuster [city]\\\"\\n- Structure: H1 title, 3-5 H2 sections, conclusion with CTA to contact Peril Adjusters LLC\\n- Format: Clean HTML only (no markdown, no DOCTYPE, start with <article>)\\n- End with: <p>Contact Peril Adjusters LLC at periladjusters.com \u2014 commercial public adjusters serving [city] and licensed in 21 states.</p>",
+                "inputType": "single"
+              }
+            ],
+            "metadata": {},
+            "thinking": {
+              "type": "disabled"
+            },
+            "container": {},
+            "max_tokens": "4000",
+            "temperature": "1",
+            "outputFormat": {
+              "type": "text"
+            }
+          },
+          "module": "anthropic-claude:createAMessage",
+          "onerror": [
+            {
+              "id": 6,
+              "mapper": {
+                "count": "3",
+                "retry": true,
+                "interval": "15"
+              },
+              "module": "builtin:Break",
+              "version": 1,
+              "metadata": {
+                "expect": [
+                  {
+                    "name": "retry",
+                    "type": "boolean",
+                    "label": "Automatically complete execution",
+                    "required": true
+                  },
+                  {
+                    "name": "count",
+                    "type": "uinteger",
+                    "label": "Number of attempts",
+                    "required": true,
+                    "validate": {
+                      "max": 10000,
+                      "min": 1
+                    }
+                  },
+                  {
+                    "name": "interval",
+                    "type": "uinteger",
+                    "label": "Interval between attempts",
+                    "required": true,
+                    "validate": {
+                      "max": 44640,
+                      "min": 1
+                    }
+                  }
+                ],
+                "restore": {
+                  "expect": {
+                    "retry": {
+                      "mode": "chose"
+                    }
+                  }
+                },
+                "designer": {
+                  "x": 600,
+                  "y": 150
+                }
+              },
+              "parameters": {}
+            }
+          ],
+          "version": 1,
+          "metadata": {
+            "expect": [
+              {
+                "name": "model",
+                "type": "select",
+                "label": "Model",
+                "required": true
+              },
+              {
+                "name": "max_tokens",
+                "type": "uinteger",
+                "label": "Max Tokens",
+                "required": true
+              },
+              {
+                "name": "messages",
+                "spec": {
+                  "name": "value",
+                  "spec": [
+                    {
+                      "name": "role",
+                      "type": "select",
+                      "label": "Role",
+                      "options": [
+                        {
+                          "label": "User",
+                          "value": "user",
+                          "nested": [
+                            {
+                              "name": "inputType",
+                              "type": "select",
+                              "label": "Input Type",
+                              "default": "multiple",
+                              "options": [
+                                {
+                                  "label": "Single string",
+                                  "value": "single",
+                                  "nested": [
+                                    {
+                                      "help": "If the request ends with an assistant turn, then the response content will continue directly from that last turn.",
+                                      "name": "content",
+                                      "type": "text",
+                                      "label": "Content",
+                                      "required": true
+                                    }
+                                  ]
+                                },
+                                {
+                                  "label": "Multiple content blocks",
+                                  "value": "multiple",
+                                  "nested": [
+                                    {
+                                      "name": "content",
+                                      "spec": {
+                                        "spec": [
+                                          {
+                                            "help": "For models that support image content blocks (vision), see the [Anthropic model comparison table](https://docs.anthropic.com/en/docs/about-claude/models#model-comparison-table).",
+                                            "name": "type",
+                                            "type": "select",
+                                            "label": "Type",
+                                            "options": [
+                                              {
+                                                "label": "Text",
+                                                "value": "text",
+                                                "nested": [
+                                                  {
+                                                    "help": "Content of the message on behalf of the selected **Role** .",
+                                                    "name": "text",
+                                                    "type": "text",
+                                                    "label": "Text",
+                                                    "required": true
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "label": "Image",
+                                                "value": "image",
+                                                "nested": [
+                                                  {
+                                                    "name": "source",
+                                                    "spec": [
+                                                      {
+                                                        "help": "File name, including the extension, for example, `image.jpg`.",
+                                                        "name": "filename",
+                                                        "type": "filename",
+                                                        "label": "Filename",
+                                                        "required": true,
+                                                        "semantic": "file:name",
+                                                        "extension": [
+                                                          "jpeg",
+                                                          "jpg",
+                                                          "png",
+                                                          "gif",
+                                                          "webp"
+                                                        ]
+                                                      },
+                                                      {
+                                                        "help": "Binary data of the image. For example, you can retrieve the binary data of your image using the **HTTP: Get a file** module.",
+                                                        "name": "data",
+                                                        "type": "buffer",
+                                                        "label": "Data",
+                                                        "required": true,
+                                                        "semantic": "file:data"
+                                                      }
+                                                    ],
+                                                    "type": "collection",
+                                                    "label": "Source",
+                                                    "required": true
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "label": "PDF document",
+                                                "value": "document",
+                                                "nested": [
+                                                  {
+                                                    "name": "pdfFileName",
+                                                    "type": "filename",
+                                                    "label": "Filename",
+                                                    "required": true,
+                                                    "semantic": "file:name",
+                                                    "extension": [
+                                                      "pdf"
+                                                    ]
+                                                  },
+                                                  {
+                                                    "name": "pdfFileData",
+                                                    "type": "buffer",
+                                                    "label": "Data",
+                                                    "required": true,
+                                                    "semantic": "file:data"
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "label": "Tool result",
+                                                "value": "tool_result",
+                                                "nested": [
+                                                  {
+                                                    "name": "tool_use_id",
+                                                    "type": "text",
+                                                    "label": "Tool Use ID",
+                                                    "required": true
+                                                  },
+                                                  {
+                                                    "name": "inputType",
+                                                    "type": "select",
+                                                    "label": "Input Type",
+                                                    "default": "single",
+                                                    "options": [
+                                                      {
+                                                        "label": "Single string",
+                                                        "value": "single",
+                                                        "nested": [
+                                                          {
+                                                            "help": "If the request ends with an assistant turn, then the response content will continue directly from that last turn.",
+                                                            "name": "content",
+                                                            "type": "text",
+                                                            "label": "Content",
+                                                            "required": true
+                                                          }
+                                                        ]
+                                                      },
+                                                      {
+                                                        "label": "Multiple content blocks",
+                                                        "value": "multiple",
+                                                        "nested": [
+                                                          {
+                                                            "name": "content",
+                                                            "spec": {
+                                                              "spec": [
+                                                                {
+                                                                  "help": "For models that support image content blocks (vision), see the [Anthropic model comparison table](https://docs.anthropic.com/en/docs/about-claude/models#model-comparison-table).",
+                                                                  "name": "type",
+                                                                  "type": "select",
+                                                                  "label": "Type",
+                                                                  "options": [
+                                                                    {
+                                                                      "label": "Text",
+                                                                      "value": "text",
+                                                                      "nested": [
+                                                                        {
+                                                                          "help": "Content of the message on behalf of the selected **Role** .",
+                                                                          "name": "text",
+                                                                          "type": "text",
+                                                                          "label": "Text",
+                                                                          "required": true
+                                                                        }
+                                                                      ]
+                                                                    },
+                                                                    {
+                                                                      "label": "Image",
+                                                                      "value": "image",
+                                                                      "nested": [
+                                                                        {
+                                                                          "name": "source",
+                                                                          "spec": [
+                                                                            {
+                                                                              "help": "File name, including the extension, for example, `image.jpg`.",
+                                                                              "name": "filename",
+                                                                              "type": "filename",
+                                                                              "label": "Filename",
+                                                                              "required": true,
+                                                                              "semantic": "file:name",
+                                                                              "extension": [
+                                                                                "jpeg",
+                                                                                "jpg",
+                                                                                "png",
+                                                                                "gif",
+                                                                                "webp"
+                                                                              ]
+                                                                            },
+                                                                            {
+                                                                              "help": "Binary data of the image. For example, you can retrieve the binary data of your image using the **HTTP: Get a file** module.",
+                                                                              "name": "data",
+                                                                              "type": "buffer",
+                                                                              "label": "Data",
+                                                                              "required": true,
+                                                                              "semantic": "file:data"
+                                                                            }
+                                                                          ],
+                                                                          "type": "collection",
+                                                                          "label": "Source",
+                                                                          "required": true
+                                                                        }
+                                                                      ]
+                                                                    },
+                                                                    {
+                                                                      "label": "PDF document",
+                                                                      "value": "document",
+                                                                      "nested": [
+                                                                        {
+                                                                          "name": "pdfFileName",
+                                                                          "type": "filename",
+                                                                          "label": "Filename",
+                                                                          "required": true,
+                                                                          "semantic": "file:name",
+                                                                          "extension": [
+                                                                            "pdf"
+                                                                          ]
+                                                                        },
+                                                                        {
+                                                                          "name": "pdfFileData",
+                                                                          "type": "buffer",
+                                                                          "label": "Data",
+                                                                          "required": true,
+                                                                          "semantic": "file:data"
+                                                                        }
+                                                                      ]
+                                                                    }
+                                                                  ],
+                                                                  "required": true
+                                                                }
+                                                              ],
+                                                              "type": "collection",
+                                                              "label": "Content"
+                                                            },
+                                                            "type": "array",
+                                                            "label": "Content",
+                                                            "labels": {
+                                                              "add": "Add content"
+                                                            },
+                                                            "required": true
+                                                          }
+                                                        ]
+                                                      }
+                                                    ],
+                                                    "mappable": false,
+                                                    "required": true
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "required": true
+                                          }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Content"
+                                      },
+                                      "type": "array",
+                                      "label": "Content",
+                                      "labels": {
+                                        "add": "Add content"
+                                      },
+                                      "required": true
+                                    }
+                                  ]
+                                }
+                              ],
+                              "mappable": false,
+                              "required": true
+                            }
+                          ]
+                        },
+                        {
+                          "label": "Assistant",
+                          "value": "assistant",
+                          "nested": [
+                            {
+                              "name": "inputType",
+                              "type": "select",
+                              "label": "Input Type",
+                              "default": "single",
+                              "options": [
+                                {
+                                  "label": "Single string",
+                                  "value": "single",
+                                  "nested": [
+                                    {
+                                      "help": "If the request ends with an assistant turn, then the response content will continue directly from that last turn.",
+                                      "name": "content",
+                                      "type": "text",
+                                      "label": "Content",
+                                      "required": true
+                                    }
+                                  ]
+                                },
+                                {
+                                  "label": "Multiple content blocks",
+                                  "value": "multiple",
+                                  "nested": [
+                                    {
+                                      "name": "content",
+                                      "spec": {
+                                        "spec": [
+                                          {
+                                            "help": "For models that support image content blocks (vision), see the [Anthropic model comparison table](https://docs.anthropic.com/en/docs/about-claude/models#model-comparison-table).",
+                                            "name": "type",
+                                            "type": "select",
+                                            "label": "Type",
+                                            "options": [
+                                              {
+                                                "label": "Text",
+                                                "value": "text",
+                                                "nested": [
+                                                  {
+                                                    "help": "Content of the message on behalf of the selected **Role** .",
+                                                    "name": "text",
+                                                    "type": "text",
+                                                    "label": "Text",
+                                                    "required": true
+                                                  }
+                                                ]
+                                              },
+                                              {
+                                                "label": "Tool use",
+                                                "value": "tool_use",
+                                                "nested": [
+                                                  {
+                                                    "name": "id",
+                                                    "type": "text",
+                                                    "label": "Tool ID",
+                                                    "required": true
+                                                  },
+                                                  {
+                                                    "name": "name",
+                                                    "type": "text",
+                                                    "label": "Name",
+                                                    "required": true
+                                                  },
+                                                  {
+                                                    "help": "To map a value from a previous module, follow the syntax `{{1.id}}`.",
+                                                    "name": "input",
+                                                    "type": "editor",
+                                                    "label": "Tool input",
+                                                    "editor": "monaco",
+                                                    "default": "{}",
+                                                    "language": "json",
+                                                    "required": true
+                                                  }
+                                                ]
+                                              }
+                                            ],
+                                            "required": true
+                                          }
+                                        ],
+                                        "type": "collection",
+                                        "label": "Content"
+                                      },
+                                      "type": "array",
+                                      "label": "Content",
+                                      "labels": {
+                                        "add": "Add content"
+                                      },
+                                      "required": true
+                                    }
+                                  ]
+                                }
+                              ],
+                              "mappable": false,
+                              "required": true
+                            }
+                          ]
+                        }
+                      ],
+                      "required": true
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Message"
+                },
+                "type": "array",
+                "label": "Messages",
+                "required": true
+              },
+              {
+                "name": "thinking",
+                "spec": [
+                  {
+                    "name": "type",
+                    "type": "select",
+                    "label": "Type",
+                    "validate": {
+                      "enum": [
+                        "enabled",
+                        "disabled"
+                      ]
+                    }
+                  }
+                ],
+                "type": "collection",
+                "label": "Extended Thinking"
+              },
+              {
+                "name": "container",
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "Container ID"
+                  },
+                  {
+                    "name": "skills",
+                    "spec": {
+                      "name": "value",
+                      "spec": [
+                        {
+                          "name": "type",
+                          "type": "select",
+                          "label": "Type",
+                          "options": {
+                            "store": [
+                              {
+                                "label": "Custom",
+                                "value": "custom"
+                              },
+                              {
+                                "label": "Anthropic",
+                                "value": "anthropic"
+                              }
+                            ]
+                          },
+                          "required": true
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "Skill"
+                    },
+                    "type": "array",
+                    "label": "Skills",
+                    "validate": {
+                      "maxItems": 8
+                    }
+                  }
+                ],
+                "type": "collection",
+                "label": "Container"
+              },
+              {
+                "name": "system",
+                "type": "text",
+                "label": "System Prompt"
+              },
+              {
+                "name": "metadata",
+                "spec": [
+                  {
+                    "name": "user_id",
+                    "type": "text",
+                    "label": "User ID"
+                  }
+                ],
+                "type": "collection",
+                "label": "Metadata"
+              },
+              {
+                "name": "stop_sequences",
+                "spec": {
+                  "name": "value",
+                  "type": "text",
+                  "label": "Stop Sequence"
+                },
+                "type": "array",
+                "label": "Stop Sequences"
+              },
+              {
+                "name": "temperature",
+                "type": "number",
+                "label": "Temperature",
+                "validate": {
+                  "max": 1,
+                  "min": 0
+                }
+              },
+              {
+                "name": "top_p",
+                "type": "number",
+                "label": "Top P",
+                "validate": {
+                  "max": 1
+                }
+              },
+              {
+                "name": "top_k",
+                "type": "uinteger",
+                "label": "Top K"
+              },
+              {
+                "name": "outputFormat",
+                "spec": [
+                  {
+                    "name": "type",
+                    "type": "select",
+                    "label": "Type",
+                    "validate": {
+                      "enum": [
+                        "text",
+                        "json_schema"
+                      ]
+                    }
+                  }
+                ],
+                "type": "collection",
+                "label": "Output Format"
+              },
+              {
+                "name": "additionalParameters",
+                "spec": {
+                  "name": "value",
+                  "spec": [
+                    {
+                      "name": "key",
+                      "type": "text",
+                      "label": "Parameter Name",
+                      "required": true
+                    },
+                    {
+                      "name": "type",
+                      "type": "select",
+                      "label": "Input Type",
+                      "options": [
+                        {
+                          "label": "Text",
+                          "value": "text",
+                          "nested": [
+                            {
+                              "name": "value",
+                              "type": "text",
+                              "label": "Parameter Value"
+                            }
+                          ],
+                          "default": true
+                        },
+                        {
+                          "label": "Number",
+                          "value": "number",
+                          "nested": [
+                            {
+                              "name": "value",
+                              "type": "number",
+                              "label": "Parameter Value"
+                            }
+                          ]
+                        },
+                        {
+                          "label": "Boolean",
+                          "value": "boolean",
+                          "nested": [
+                            {
+                              "name": "value",
+                              "type": "boolean",
+                              "label": "Parameter Value"
+                            }
+                          ]
+                        },
+                        {
+                          "label": "Date",
+                          "value": "date",
+                          "nested": [
+                            {
+                              "name": "value",
+                              "type": "date",
+                              "label": "Parameter Value"
+                            }
+                          ]
+                        },
+                        {
+                          "label": "Tools",
+                          "value": "tools",
+                          "nested": [
+                            {
+                              "name": "value",
+                              "spec": {
+                                "type": "text",
+                                "label": "Parameter Value"
+                              },
+                              "type": "array",
+                              "label": "Parameter Values",
+                              "labels": {
+                                "add": "Add parameter value"
+                              }
+                            }
+                          ]
+                        },
+                        {
+                          "label": "Any",
+                          "value": "any",
+                          "nested": [
+                            {
+                              "name": "value",
+                              "type": "any",
+                              "label": "Parameter Value"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "type": "collection",
+                  "label": "Input Parameter"
+                },
+                "type": "array",
+                "label": "Other Input Parameters"
+              },
+              {
+                "name": "effort",
+                "type": "select",
+                "label": "Effort Level",
+                "validate": {
+                  "enum": [
+                    "low",
+                    "medium",
+                    "high"
+                  ]
+                }
+              }
+            ],
+            "restore": {
+              "expect": {
+                "model": {
+                  "mode": "chose",
+                  "label": "Claude Sonnet 4.6",
+                  "nested": [
+                    {
+                      "help": "Controls how eager Claude is about spending tokens when responding to requests. By default, Claude uses maximum effort, which is equivalent to `High`. For details, see the [Anthropic Claude Effort guide](https://platform.claude.com/docs/en/build-with-claude/effort).",
+                      "name": "effort",
+                      "type": "select",
+                      "label": "Effort Level",
+                      "options": [
+                        {
+                          "label": "Low",
+                          "value": "low"
+                        },
+                        {
+                          "label": "Medium",
+                          "value": "medium"
+                        },
+                        {
+                          "label": "High",
+                          "value": "high"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                "effort": {
+                  "mode": "chose",
+                  "label": "Empty"
+                },
+                "messages": {
+                  "mode": "chose",
+                  "items": [
+                    {
+                      "role": {
+                        "mode": "chose",
+                        "label": "User"
+                      },
+                      "inputType": {
+                        "mode": "chose",
+                        "label": "Single string"
+                      }
+                    }
+                  ]
+                },
+                "thinking": {
+                  "nested": {
+                    "type": {
+                      "mode": "chose",
+                      "label": "Disabled"
+                    }
+                  }
+                },
+                "container": {
+                  "nested": {
+                    "skills": {
+                      "mode": "chose"
+                    }
+                  }
+                },
+                "outputFormat": {
+                  "nested": {
+                    "type": {
+                      "mode": "chose",
+                      "label": "Text"
+                    }
+                  }
+                },
+                "stop_sequences": {
+                  "mode": "chose"
+                },
+                "additionalParameters": {
+                  "mode": "chose"
+                }
+              },
+              "parameters": {
+                "__IMTCONN__": {
+                  "data": {
+                    "scoped": "true",
+                    "connection": "anthropic-claude"
+                  },
+                  "label": "My Anthropic Claude connection"
+                }
+              }
+            },
+            "designer": {
+              "x": 300,
+              "y": 0
+            },
+            "interface": [
+              {
+                "name": "files",
+                "spec": [
+                  {
+                    "name": "fileName",
+                    "type": "filename",
+                    "label": "File Name",
+                    "semantic": "file:name"
+                  },
+                  {
+                    "name": "fileData",
+                    "type": "buffer",
+                    "label": "File Data",
+                    "semantic": "file:data"
+                  },
+                  {
+                    "name": "fileId",
+                    "type": "text",
+                    "label": "File ID"
+                  }
+                ],
+                "type": "array",
+                "label": "Files"
+              },
+              {
+                "name": "textResponse",
+                "type": "text",
+                "label": "Text Response"
+              },
+              {
+                "name": "id",
+                "type": "text",
+                "label": "Unique ID"
+              },
+              {
+                "name": "type",
+                "type": "text",
+                "label": "Type"
+              },
+              {
+                "name": "role",
+                "type": "text",
+                "label": "Role"
+              },
+              {
+                "name": "content",
+                "spec": {
+                  "spec": [
+                    {
+                      "name": "type",
+                      "type": "text",
+                      "label": "Type"
+                    },
+                    {
+                      "name": "thinking",
+                      "type": "text",
+                      "label": "Thinking"
+                    },
+                    {
+                      "name": "signature",
+                      "type": "text",
+                      "label": "Signature"
+                    },
+                    {
+                      "name": "text",
+                      "type": "text",
+                      "label": "Text"
+                    },
+                    {
+                      "name": "id",
+                      "type": "text",
+                      "label": "ID"
+                    },
+                    {
+                      "name": "name",
+                      "type": "text",
+                      "label": "Name"
+                    },
+                    {
+                      "name": "input",
+                      "spec": [],
+                      "type": "collection",
+                      "label": "Input"
+                    }
+                  ],
+                  "type": "collection"
+                },
+                "type": "array",
+                "label": "Content"
+              },
+              {
+                "name": "model",
+                "type": "text",
+                "label": "Model"
+              },
+              {
+                "name": "container",
+                "spec": [
+                  {
+                    "name": "id",
+                    "type": "text",
+                    "label": "ID"
+                  },
+                  {
+                    "name": "expires_at",
+                    "type": "date",
+                    "label": "Expires at"
+                  },
+                  {
+                    "name": "skills",
+                    "spec": {
+                      "spec": [
+                        {
+                          "name": "type",
+                          "type": "text",
+                          "label": "Type"
+                        },
+                        {
+                          "name": "skill_id",
+                          "type": "text",
+                          "label": "Skill ID"
+                        },
+                        {
+                          "name": "version",
+                          "type": "text",
+                          "label": "Version"
+                        }
+                      ],
+                      "type": "collection"
+                    },
+                    "type": "array",
+                    "label": "Skills"
+                  }
+                ],
+                "type": "collection",
+                "label": "Container"
+              },
+              {
+                "name": "stop_reason",
+                "type": "text",
+                "label": "Stop Reason"
+              },
+              {
+                "name": "stop_sequence",
+                "type": "text",
+                "label": "Stop Sequence"
+              },
+              {
+                "name": "usage",
+                "spec": [
+                  {
+                    "name": "input_tokens",
+                    "type": "uinteger",
+                    "label": "Input Tokens"
+                  },
+                  {
+                    "name": "cache_creation_input_tokens",
+                    "type": "number",
+                    "label": "Cache Creation Input Tokens"
+                  },
+                  {
+                    "name": "cache_read_input_tokens",
+                    "type": "number",
+                    "label": "Cache Read Input Tokens"
+                  },
+                  {
+                    "name": "output_tokens",
+                    "type": "uinteger",
+                    "label": "Output Tokens"
+                  },
+                  {
+                    "name": "cache_creation",
+                    "spec": [
+                      {
+                        "name": "ephemeral_5m_input_tokens",
+                        "type": "number",
+                        "label": "Ephemeral 5m Input Tokens"
+                      },
+                      {
+                        "name": "ephemeral_1h_input_tokens",
+                        "type": "number",
+                        "label": "Ephemeral 1h Input Tokens"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Cache Creation"
+                  },
+                  {
+                    "name": "service_tier",
+                    "type": "text",
+                    "label": "Service Tier"
+                  },
+                  {
+                    "name": "server_tool_use",
+                    "spec": [
+                      {
+                        "name": "web_search_requests",
+                        "type": "number",
+                        "label": "Web Search Requests"
+                      }
+                    ],
+                    "type": "collection",
+                    "label": "Server Tool  Use"
+                  }
+                ],
+                "type": "collection",
+                "label": "Usage"
+              },
+              {
+                "name": "tools",
+                "spec": [],
+                "type": "collection",
+                "label": "Tools"
+              }
+            ],
+            "parameters": [
+              {
+                "name": "__IMTCONN__",
+                "type": "account:anthropic-claude",
+                "label": "Connection",
+                "required": true
+              }
+            ]
+          },
+          "parameters": {
+            "__IMTCONN__": 7847466
+          }
+        },
+        {
+          "id": 4,
+          "mapper": {
+            "data": "{{3.textResponse}}",
+            "select": "value",
+            "convert": false,
+            "filename": "{{2.value}}-commercial-public-adjuster.html",
+            "folderId": "/16FSul6gcWgXEAU8gX2ilN7LTWWY0BJUm",
+            "destination": "drive"
+          },
+          "module": "google-drive:uploadAFile",
+          "version": 4,
+          "metadata": {
+            "designer": {
+              "x": 600,
+              "y": -150
+            }
+          },
+          "parameters": {
+            "__IMTCONN__": 7807189
+          }
+        },
+        {
+          "id": 5,
+          "mapper": {
+            "base": "appYLStLz7QdBGDtp",
+            "table": "tbl0xLyiXX2Rrfpmh",
+            "record": {
+              "fldWSCFY4PFZxv2xu": "commercial public adjuster {{2.value}}",
+              "fldc6JO1B51ScQDz4": "{{4.webViewLink}}",
+              "fldstxCgPs02sFrvS": "{{2.value}} - Commercial Public Adjuster",
+              "fldtDzHlRdjWtWiEl": "Needs Review"
+            },
+            "typecast": false,
+            "useColumnId": false
+          },
+          "module": "airtable:ActionCreateRecord",
+          "version": 3,
+          "metadata": {
+            "expect": [
+              {
+                "name": "base",
+                "type": "select",
+                "label": "Base",
+                "required": true
+              },
+              {
+                "name": "typecast",
+                "type": "boolean",
+                "label": "Smart links",
+                "required": true
+              },
+              {
+                "name": "useColumnId",
+                "type": "boolean",
+                "label": "Use Column ID",
+                "required": true
+              },
+              {
+                "name": "table",
+                "type": "select",
+                "label": "Table",
+                "required": true
+              },
+              {
+                "name": "record",
+                "spec": [
+                  {
+                    "name": "fldstxCgPs02sFrvS",
+                    "type": "text",
+                    "label": "Name"
+                  },
+                  {
+                    "name": "fldWSCFY4PFZxv2xu",
+                    "type": "text",
+                    "label": "Target Keyword"
+                  },
+                  {
+                    "name": "fldC2LGz0R8hvJaJC",
+                    "type": "text",
+                    "label": "City"
+                  },
+                  {
+                    "name": "fld4uWDqEnFKNn26Y",
+                    "type": "text",
+                    "label": "State"
+                  },
+                  {
+                    "mode": "edit",
+                    "name": "fldxSYrybeKOtBMQX",
+                    "type": "select",
+                    "label": "Claim Type Focus"
+                  },
+                  {
+                    "mode": "edit",
+                    "name": "fldtDzHlRdjWtWiEl",
+                    "type": "select",
+                    "label": "Page Status"
+                  },
+                  {
+                    "name": "fldc6JO1B51ScQDz4",
+                    "type": "text",
+                    "label": "Published URL"
+                  },
+                  {
+                    "name": "fldNOTiHvkDfYHW0h",
+                    "time": false,
+                    "type": "date",
+                    "label": "Published Date"
+                  },
+                  {
+                    "name": "fldIJj5VU28XYVLrE",
+                    "type": "number",
+                    "label": "Google Ranking"
+                  },
+                  {
+                    "name": "fldMr0mdqQmPNj8Fd",
+                    "type": "number",
+                    "label": "Monthly Impressions"
+                  },
+                  {
+                    "name": "fldnEmu2gsySpFfQj",
+                    "type": "number",
+                    "label": "Monthly Clicks"
+                  },
+                  {
+                    "name": "fld6yylIq9y7gZSdB",
+                    "type": "number",
+                    "label": "Leads Generated"
+                  },
+                  {
+                    "name": "fldb8ah4Z4xAVlsJf",
+                    "type": "text",
+                    "label": "State License Number"
+                  },
+                  {
+                    "mode": "edit",
+                    "name": "fldX5d1BmBy3EBgDn",
+                    "type": "select",
+                    "label": "Priority"
+                  }
+                ],
+                "type": "collection",
+                "label": "Record"
+              }
+            ],
+            "restore": {
+              "expect": {
+                "base": {
+                  "label": "Peril Marketing Engine"
+                },
+                "table": {
+                  "label": "SEO Content Engine",
+                  "nested": [
+                    {
+                      "name": "record",
+                      "spec": [
+                        {
+                          "name": "fldstxCgPs02sFrvS",
+                          "type": "text",
+                          "label": "Name"
+                        },
+                        {
+                          "name": "fldWSCFY4PFZxv2xu",
+                          "type": "text",
+                          "label": "Target Keyword"
+                        },
+                        {
+                          "name": "fldC2LGz0R8hvJaJC",
+                          "type": "text",
+                          "label": "City"
+                        },
+                        {
+                          "name": "fld4uWDqEnFKNn26Y",
+                          "type": "text",
+                          "label": "State"
+                        },
+                        {
+                          "mode": "edit",
+                          "name": "fldxSYrybeKOtBMQX",
+                          "type": "select",
+                          "label": "Claim Type Focus",
+                          "dynamic": true,
+                          "options": [
+                            {
+                              "label": "Commercial Hail",
+                              "value": "Commercial Hail"
+                            },
+                            {
+                              "label": "HOA Hail",
+                              "value": "HOA Hail"
+                            },
+                            {
+                              "label": "Church Storm",
+                              "value": "Church Storm"
+                            },
+                            {
+                              "label": "Derecho",
+                              "value": "Derecho"
+                            },
+                            {
+                              "label": "Wind Damage",
+                              "value": "Wind Damage"
+                            },
+                            {
+                              "label": "Hurricane",
+                              "value": "Hurricane"
+                            },
+                            {
+                              "label": "TPO Roof Denial",
+                              "value": "TPO Roof Denial"
+                            },
+                            {
+                              "label": "Commercial Fire",
+                              "value": "Commercial Fire"
+                            },
+                            {
+                              "label": "Multifamily",
+                              "value": "Multifamily"
+                            }
+                          ],
+                          "validate": false
+                        },
+                        {
+                          "mode": "edit",
+                          "name": "fldtDzHlRdjWtWiEl",
+                          "type": "select",
+                          "label": "Page Status",
+                          "dynamic": true,
+                          "options": [
+                            {
+                              "label": "Pending",
+                              "value": "Pending"
+                            },
+                            {
+                              "label": "Generating",
+                              "value": "Generating"
+                            },
+                            {
+                              "label": "Published",
+                              "value": "Published"
+                            },
+                            {
+                              "label": "Needs Review",
+                              "value": "Needs Review"
+                            }
+                          ],
+                          "validate": false
+                        },
+                        {
+                          "name": "fldc6JO1B51ScQDz4",
+                          "type": "text",
+                          "label": "Published URL"
+                        },
+                        {
+                          "name": "fldNOTiHvkDfYHW0h",
+                          "time": false,
+                          "type": "date",
+                          "label": "Published Date"
+                        },
+                        {
+                          "name": "fldIJj5VU28XYVLrE",
+                          "type": "number",
+                          "label": "Google Ranking"
+                        },
+                        {
+                          "name": "fldMr0mdqQmPNj8Fd",
+                          "type": "number",
+                          "label": "Monthly Impressions"
+                        },
+                        {
+                          "name": "fldnEmu2gsySpFfQj",
+                          "type": "number",
+                          "label": "Monthly Clicks"
+                        },
+                        {
+                          "name": "fld6yylIq9y7gZSdB",
+                          "type": "number",
+                          "label": "Leads Generated"
+                        },
+                        {
+                          "name": "fldb8ah4Z4xAVlsJf",
+                          "type": "text",
+                          "label": "State License Number"
+                        },
+                        {
+                          "mode": "edit",
+                          "name": "fldX5d1BmBy3EBgDn",
+                          "type": "select",
+                          "label": "Priority",
+                          "dynamic": true,
+                          "options": [
+                            {
+                              "label": "High",
+                              "value": "High"
+                            },
+                            {
+                              "label": "Medium",
+                              "value": "Medium"
+                            },
+                            {
+                              "label": "Low",
+                              "value": "Low"
+                            }
+                          ],
+                          "validate": false
+                        }
+                      ],
+                      "type": "collection",
+                      "label": "Record"
+                    }
+                  ]
+                },
+                "record": {
+                  "nested": {
+                    "fldX5d1BmBy3EBgDn": {
+                      "mode": "edit"
+                    },
+                    "fldtDzHlRdjWtWiEl": {
+                      "mode": "edit"
+                    },
+                    "fldxSYrybeKOtBMQX": {
+                      "mode": "edit"
+                    }
+                  }
+                },
+                "typecast": {
+                  "mode": "chose"
+                },
+                "useColumnId": {
+                  "mode": "chose"
+                }
+              },
+              "parameters": {
+                "__IMTCONN__": {
+                  "data": {
+                    "scoped": "true",
+                    "connection": "airtable2"
+                  },
+                  "label": "My Airtable Token "
+                }
+              }
+            },
+            "designer": {
+              "x": 900,
+              "y": 0
+            },
+            "interface": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID"
+              },
+              {
+                "name": "createdTime",
+                "type": "date",
+                "label": "Created Time"
+              },
+              {
+                "name": "Name",
+                "type": "text",
+                "label": "Name"
+              },
+              {
+                "name": "Target Keyword",
+                "type": "text",
+                "label": "Target Keyword"
+              },
+              {
+                "name": "City",
+                "type": "text",
+                "label": "City"
+              },
+              {
+                "name": "State",
+                "type": "text",
+                "label": "State"
+              },
+              {
+                "name": "Claim Type Focus",
+                "type": "text",
+                "label": "Claim Type Focus"
+              },
+              {
+                "name": "Page Status",
+                "type": "text",
+                "label": "Page Status"
+              },
+              {
+                "name": "Published URL",
+                "type": "text",
+                "label": "Published URL"
+              },
+              {
+                "name": "Published Date",
+                "time": false,
+                "type": "date",
+                "label": "Published Date"
+              },
+              {
+                "name": "Google Ranking",
+                "type": "number",
+                "label": "Google Ranking"
+              },
+              {
+                "name": "Monthly Impressions",
+                "type": "number",
+                "label": "Monthly Impressions"
+              },
+              {
+                "name": "Monthly Clicks",
+                "type": "number",
+                "label": "Monthly Clicks"
+              },
+              {
+                "name": "Leads Generated",
+                "type": "number",
+                "label": "Leads Generated"
+              },
+              {
+                "name": "State License Number",
+                "type": "text",
+                "label": "State License Number"
+              },
+              {
+                "name": "Priority",
+                "type": "text",
+                "label": "Priority"
+              }
+            ],
+            "parameters": [
+              {
+                "name": "__IMTCONN__",
+                "type": "account:airtable3,airtable2",
+                "label": "Connection",
+                "required": true
+              }
+            ]
+          },
+          "parameters": {
+            "__IMTCONN__": 7692537
+          }
+        }
+      ],
+      "name": "Integration Tools",
+      "metadata": {
+        "instant": false,
+        "version": 1,
+        "designer": {
+          "orphans": [],
+          "samples": {
+            "1": {
+              "CityList": "Denver,Chicago,St. Louis,Atlanta,Charlotte,Nashville,Omaha,Kansas City,Des Moines,Minneapolis"
+            },
+            "2": {
+              "value": "Denver",
+              "__IMTINDEX__": 1,
+              "__IMTLENGTH__": 10
+            },
+            "3": {
+              "id": "msg_017CpFquHWEKPLb8vhwUyw6b",
+              "role": "assistant",
+              "type": "message",
+              "model": "claude-sonnet-4-6",
+              "usage": {
+                "input_tokens": 396,
+                "service_tier": "standard",
+                "inference_geo": "global",
+                "output_tokens": 2991,
+                "cache_creation": {
+                  "ephemeral_1h_input_tokens": 0,
+                  "ephemeral_5m_input_tokens": 0
+                },
+                "cache_read_input_tokens": 0,
+                "cache_creation_input_tokens": 0
+              },
+              "content": [
+                {
+                  "text": "```html\n<article>\n\n<h1>Commercial Property Insurance Claims in Denver, CO: How a Public Adjuster Hel...",
+                  "type": "text"
+                }
+              ],
+              "stop_reason": "end_turn",
+              "textResponse": "```html\n<article>\n\n<h1>Commercial Property Insurance Claims in Denver, CO: How a Public Adjuster Hel...",
+              "stop_sequence": null
+            },
+            "4": {
+              "id": "1wYsberaLqZ353pUugDNh1mIEW6rEBitt",
+              "kind": "drive#file",
+              "name": "Denver-commercial-public-adjuster.html",
+              "size": "14317",
+              "owners": [
+                {
+                  "me": true,
+                  "kind": "drive#user",
+                  "photoLink": "https://lh3.googleusercontent.com/a-/ALV-UjWwlrcfG88jxQLDcnlOo3u17hz-cP2-dJwdN1dVcr-g7k7jnNmEgC3_rei...",
+                  "displayName": "Jerad Watson",
+                  "emailAddress": "jerad@periladjusters.com",
+                  "permissionId": "10558511545403484615"
+                }
+              ],
+              "shared": true,
+              "spaces": [
+                "drive"
+              ],
+              "parents": [
+                "16FSul6gcWgXEAU8gX2ilN7LTWWY0BJUm"
+              ],
+              "starred": false,
+              "trashed": false,
+              "version": "2",
+              "iconLink": "https://drive-thirdparty.googleusercontent.com/16/type/text/html",
+              "mimeType": "text/html",
+              "ownedByMe": true,
+              "viewedByMe": false,
+              "createdTime": "2026-03-29T21:46:25.407Z",
+              "md5Checksum": "6db958963203b9e13ba4127069204493",
+              "permissions": [
+                {
+                  "id": "10558511545403484615",
+                  "kind": "drive#permission",
+                  "role": "owner",
+                  "type": "user",
+                  "deleted": null,
+                  "displayName": "jerad",
+                  "emailAddress": "jerad@periladjusters.com",
+                  "pendingOwner": null
+                }
+              ],
+              "webViewLink": "https://drive.google.com/file/d/1wYsberaLqZ353pUugDNh1mIEW6rEBitt/view?usp=drivesdk",
+              "capabilities": {
+                "canCopy": true,
+                "canEdit": true,
+                "canShare": true,
+                "canTrash": true,
+                "canDelete": true,
+                "canRename": true,
+                "canComment": true,
+                "canUntrash": true,
+                "canDownload": true,
+                "canReadLabels": false,
+                "canAddChildren": false,
+                "canListChildren": false,
+                "canModifyLabels": false,
+                "canModifyContent": true,
+                "canReadRevisions": true,
+                "canRemoveChildren": false,
+                "canAcceptOwnership": false,
+                "canAddMyDriveParent": false,
+                "canMoveItemOutOfDrive": true,
+                "canMoveItemWithinDrive": true,
+                "canRemoveMyDriveParent": true,
+                "canMoveItemIntoTeamDrive": true,
+                "canMoveChildrenWithinDrive": false,
+                "canModifyContentRestriction": true,
+                "canRemoveContentRestriction": false,
+                "canEnableInheritedPermissions": true,
+                "canChangeSecurityUpdateEnabled": false,
+                "canChangeViewersCanCopyContent": true,
+                "canDisableInheritedPermissions": false,
+                "canChangeItemDownloadRestriction": true,
+                "canModifyOwnerContentRestriction": true,
+                "canModifyEditorContentRestriction": true,
+                "canChangeCopyRequiresWriterPermission": true
+              },
+              "hasThumbnail": false,
+              "modifiedByMe": true,
+              "modifiedTime": "2026-03-29T21:46:26.861Z",
+              "sha1Checksum": "cd52dbe967e14473f6f63342e4386519a8a5deef",
+              "fileExtension": "html",
+              "permissionIds": [
+                "12233476881582723195"
+              ],
+              "headRevisionId": "0B9OquFRN9MKud01UZVJEbTVIM0pPb0MvK1dNOUVvOW9ZMkU0PQ",
+              "quotaBytesUsed": "14317",
+              "sha256Checksum": "42fba7ce122c05eb32e3ab0041fa18b296572f6b4418f4d2b83b7a86b3f36a3b",
+              "webContentLink": "https://drive.google.com/uc?id=1wYsberaLqZ353pUugDNh1mIEW6rEBitt&export=download",
+              "isAppAuthorized": true,
+              "writersCanShare": true,
+              "modifiedByMeTime": "2026-03-29T21:46:26.861Z",
+              "originalFilename": "Denver-commercial-public-adjuster.html",
+              "thumbnailVersion": "0",
+              "explicitlyTrashed": false,
+              "fullFileExtension": "html",
+              "lastModifyingUser": {
+                "me": true,
+                "kind": "drive#user",
+                "photoLink": "https://lh3.googleusercontent.com/a-/ALV-UjWwlrcfG88jxQLDcnlOo3u17hz-cP2-dJwdN1dVcr-g7k7jnNmEgC3_rei...",
+                "displayName": "Jerad Watson",
+                "emailAddress": "jerad@periladjusters.com",
+                "permissionId": "10558511545403484615"
+              },
+              "linkShareMetadata": {
+                "securityUpdateEnabled": true,
+                "securityUpdateEligible": false
+              },
+              "downloadRestrictions": {
+                "itemDownloadRestriction": {
+                  "restrictedForReaders": false,
+                  "restrictedForWriters": false
+                },
+                "effectiveDownloadRestrictionWithContext": {
+                  "restrictedForReaders": false,
+                  "restrictedForWriters": false
+                }
+              },
+              "viewersCanCopyContent": true,
+              "copyRequiresWriterPermission": false,
+              "inheritedPermissionsDisabled": false
+            }
+          }
+        },
+        "scenario": {
+          "dlq": true,
+          "slots": null,
+          "dataloss": false,
+          "maxErrors": 3,
+          "autoCommit": true,
+          "roundtrips": 1,
+          "sequential": false,
+          "confidential": false,
+          "freshVariables": false,
+          "autoCommitTriggerLast": true
+        }
+      }
+    },
+    "scheduling": {
+      "type": "indefinitely",
+      "interval": 900
+    },
+    "concept": false,
+    "created": "2026-03-27T20:12:57.033Z",
+    "last_edit": "2026-03-31T22:17:28.783Z",
+    "metadata": {
+      "input_spec": [],
+      "output_spec": []
+    },
+    "idSequence": 7
+  }
+}
